@@ -1,7 +1,7 @@
 const bcrypt= require('bcrypt');
 const {createUser, findUserByUsername}= require('../models/userModel')
 
-async function reqister(req, res){
+async function register(req, res){
     try{
         const {username, password, role}= req.body
 
@@ -27,4 +27,4 @@ async function reqister(req, res){
     }
 }
 
-module.export= {reqister}
+module.exports = {register}
