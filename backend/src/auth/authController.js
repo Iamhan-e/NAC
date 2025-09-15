@@ -1,30 +1,17 @@
-const bcrypt= require('bcrypt');
-const {createUser, findUserByUsername}= require('../models/userModel')
+// src/auth/authController.js
+const User = require("../models/userModel");
 
-async function register(req, res){
-    try{
-        const {username, password, role}= req.body
+async function register(req, res) {
+  const { username, password, role } = req.body;
 
-        if(!username || !password){
-            return res.status(400).json({error:"Username and password required"});
+  if (!username || !password || !role) {
+    return res.status(400).json({ error: "All fields are required" });
+  }
 
-        }
+  // Save user to DB (placeholder for now)
+  await User.createUser(username, password, role);
 
-        const existingUser = await findUserByUsername(username);
-
-        if(existingUser){
-            return res.status(400).json({error: "username already taken"})
-        }
-
-        const saltRounds= 10;
-        const passwordHash= await bcrypt.hash(password, saltRounds)
-
-        const user= await createUser(username, passwordHash, role || 'student');
-        res.status(201).json({message: "User registered successfully", user});
-    } catch(err){
-        console.error(err);
-        res.status(500).json({error: "Server error"})
-    }
+  res.status(201).json({ message: "User registered successfully" });
 }
 
-module.exports = {register}
+module.exports = { register };
